@@ -9,6 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Unzip the uploaded source
+        run: |
+          if [ ! -f settings.gradle.kts ]; then
+            Z=$(ls *.zip | head -1)
+            echo "Unzipping $Z"
+            unzip -q -o "$Z" -d src_unzipped
+            D=$(dirname "$(find src_unzipped -name settings.gradle.kts | head -1)")
+            cp -r "$D"/. .
+          fi
+          ls -la
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
